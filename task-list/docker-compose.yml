@@ -1,7 +1,5 @@
 version: '3.8'
-
 services:
-    # Laravel 應用服務
     app:
         build:
             context: .
@@ -16,7 +14,6 @@ services:
         networks:
             - laravel_net
 
-    # MySQL 8.0
     mysql:
         image: mysql:8.0
         container_name: mysql
@@ -25,10 +22,17 @@ services:
         ports:
             - "3306:3306"
         environment:
-            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root # root 用戶密碼
+            MYSQL_DATABASE: laravel-task-list # 資料庫名稱
+            # 移除 MYSQL_USER 和 MYSQL_PASSWORD
+        volumes:
+            - mysql_data:/var/lib/mysql
         networks:
             - laravel_net
 
 networks:
     laravel_net:
         driver: bridge
+
+volumes:
+    mysql_data:
