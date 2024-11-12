@@ -31,6 +31,18 @@ services:
         networks:
             - laravel_net
 
+    # MySQL 8.0
+    mysql:
+        image: mysql:8.0
+        container_name: mysql_db
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        networks:
+            - laravel_net
+
 networks:
     laravel_net:
         driver: bridge
