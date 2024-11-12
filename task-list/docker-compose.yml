@@ -13,7 +13,8 @@ services:
             - mysql
         networks:
             - laravel_net
-
+        environment:
+            - TZ=Asia/Taipei
     mysql:
         image: mysql:8.0
         container_name: mysql
