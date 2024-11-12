@@ -10,9 +10,10 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     sqlite3 \
+    pkg-config \
     libsqlite3-dev
 
-# 安裝 PHP 擴充
+RUN docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd
 RUN docker-php-ext-install pdo pdo_sqlite mbstring exif pcntl bcmath gd
 
 # 安裝 Composer
