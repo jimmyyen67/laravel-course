@@ -49,6 +49,7 @@
                     Add Task
                 @endisset
             </button>
+            <a href="{{ url()->previous() }}">Back</a>
         </div>
     </form>
 @endsection

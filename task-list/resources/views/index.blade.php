@@ -3,6 +3,9 @@
 @section('title', 'The list of tasks')
 
 @section('content')
+    <div>
+        <a href="{{ route('tasks.create') }}">Create a new task</a>
+    </div>
 
     <div>
         {{-- @if (count($tasks)) --}}
