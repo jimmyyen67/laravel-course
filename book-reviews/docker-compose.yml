@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel_app
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "8070:8000"
+        depends_on:
+            - mysql
+        networks:
+            - laravel_net
+        environment:
+            - TZ=Asia/Taipei
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root # root 用戶密碼
+            MYSQL_DATABASE: laravel-book-reviews # 資料庫名稱
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - laravel_net
+
+networks:
+    laravel_net:
+        driver: bridge
+
+volumes:
+    mysql_data:
