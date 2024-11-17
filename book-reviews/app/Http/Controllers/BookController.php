@@ -18,10 +18,10 @@ class BookController extends Controller
         $filter = $request->input('filter', '');
 
         $books = Book::query()
-        ->when(
-            $title,
-            fn($query, $title) => $query->title($title)
-        );
+            ->when(
+                $title,
+                fn($query, $title) => $query->title($title)
+            );
 
         $books = match ($filter) {
             'popular_last_month' => $books->popularLastMonth(),
@@ -30,8 +30,9 @@ class BookController extends Controller
             'highest_rated_last_6months' => $books->highestRatedLast6Months(),
             default => $books->latest()
         };
-        
-        $books = $books->get();
+
+        $cacheKey = 'books:' . $title . ':' . $filter;
+        $books = cache()->remember($cacheKey, now()->addMinutes(10), fn() => $books->get());
 
         return view('books.index', [
             'books' => $books->load([
@@ -61,6 +62,10 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        $cacheKey = 'book:' . $book->id;
+        $book = cache()->remember($cacheKey, 3600, fn() => $book->load([
+            'reviews' => fn($query) => $query->latest()
+        ]));
         return view('books.show', ['book' => $book]);
     }
 
