@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.2-fpm-alpine
 
 # 安裝系統依賴
 RUN apt-get update && apt-get install -y \
@@ -36,5 +36,10 @@ RUN chown -R www-data:www-data \
 # 啟動腳本
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# 其餘保持不變，並在最後添加
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
 
 ENTRYPOINT ["docker-entrypoint.sh"]
