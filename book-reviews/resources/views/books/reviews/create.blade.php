@@ -14,7 +14,9 @@
                 <option value="{{ $i }}">{{ $i }}</option>
             @endfor
         </select>
-
+        @error('rating')
+            <p class="text-red-500">{{ $message }}</p>
+        @enderror
         <button type="submit" class="btn">Add Review</button>
     </form>
 @endsection
