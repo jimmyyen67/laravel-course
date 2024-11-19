@@ -10,9 +10,11 @@ services:
       - .:/var/www
     networks:
       - laravel_network
+    environment:
+      - TZ=Asia/Taipei
     depends_on:
       - mysql
-  
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -31,6 +33,7 @@ services:
     container_name: mysql
     restart: unless-stopped
     environment:
+      TZ: Asia/Taipei
       MYSQL_DATABASE: laravel_events
       MYSQL_ROOT_PASSWORD: root
     ports:
