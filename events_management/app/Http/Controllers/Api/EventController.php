@@ -3,25 +3,28 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EventResource;
 use App\Models\Event;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection as AnonymousResourceCollectionAlias;
 
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Collection
+    public function index(): AnonymousResourceCollectionAlias
     {
-        return Event::all();
+        return EventResource::collection(
+            Event::with('user', 'attendees')->get()
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Event
+    public function store(Request $request): EventResource
     {
         $event = Event::create([
             ...$request->validate([
@@ -32,21 +35,22 @@ class EventController extends Controller
             ]),
             'user_id' => 1, // 暫時把新增的活動都先掛在 user_id 1 身上
         ]);
-        return $event;
+        return new EventResource($event);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event): Event
+    public function show(Event $event): EventResource
     {
-        return $event;
+        $event->load('user', 'attendees');
+        return new EventResource($event);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event): Event
+    public function update(Request $request, Event $event): EventResource
     {
         $event->update(
             $request->validate([
@@ -56,7 +60,7 @@ class EventController extends Controller
                 'end_time' => 'sometimes|date|after:start_time',
             ])
         );
-        return $event;
+        return new EventResource($event);
     }
 
     /**
@@ -65,6 +69,6 @@ class EventController extends Controller
     public function destroy(Event $event): JsonResponse
     {
         $event->delete();
-        return response()->json(status: 204); // 無論是否有找到該ID的活動，接返回204成功、並且不回傳任何內容
+        return response()->json(status: 204); // 無論是否有找到該ID的活動，接返回204 success with no content
     }
 }
