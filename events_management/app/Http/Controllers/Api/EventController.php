@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
+use App\Http\Traits\CanLoadRelationships;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,13 +12,28 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection as AnonymousResou
 
 class EventController extends Controller
 {
+    use CanLoadRelationships;
+
+    // 這個屬性是用來定義該資源的關聯，這樣在載入資源時就可以一次載入所有關聯
+    private readonly array $relations;
+
+    public function __construct()
+    {
+        $this->relations = [
+            'user',
+            'attendees',
+            'attendees.user',
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): AnonymousResourceCollectionAlias
     {
+        $query = $this->loadRelationships(Event::query());
         return EventResource::collection(
-            Event::with('user', 'attendees')->paginate()
+            $query->latest()->paginate()
         );
     }
 
@@ -35,7 +51,7 @@ class EventController extends Controller
             ]),
             'user_id' => 1, // 暫時把新增的活動都先掛在 user_id 1 身上
         ]);
-        return new EventResource($event);
+        return new EventResource($this->loadRelationships($event));
     }
 
     /**
@@ -43,8 +59,7 @@ class EventController extends Controller
      */
     public function show(Event $event): EventResource
     {
-        $event->load('user', 'attendees');
-        return new EventResource($event);
+        return new EventResource($this->loadRelationships($event));
     }
 
     /**
@@ -60,7 +75,7 @@ class EventController extends Controller
                 'end_time' => 'sometimes|date|after:start_time',
             ])
         );
-        return new EventResource($event);
+        return new EventResource($this->loadRelationships($event));
     }
 
     /**
