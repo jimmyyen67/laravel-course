@@ -19,7 +19,8 @@ class EventController extends Controller
 
     public function __construct()
     {
-        $this->relations = [
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+                $this->relations = [
             'user',
             'attendees',
             'attendees.user',
@@ -49,7 +50,7 @@ class EventController extends Controller
                 'start_time' => 'required|date',
                 'end_time' => 'required|date|after:start_time',
             ]),
-            'user_id' => 1, // 暫時把新增的活動都先掛在 user_id 1 身上
+            'user_id' => $request->user()->id,
         ]);
         return new EventResource($this->loadRelationships($event));
     }
