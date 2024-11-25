@@ -26,13 +26,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('update-event', function($user, Event $event) {
-            return $user->id === $event->user_id;
-        });
-
-        // Event Creator can delete other attendee, or the attendees can delete themselves
-        Gate::define('delete-attendee', function($user, Event $event, Attendee $attendee) {
-            return $user->id === $event->user_id || $user->id === $attendee->user_id;
-        });
+        // Use Policy to authorize the actions
+        // Gate::define('update-event', function($user, Event $event) {
+        //     return $user->id === $event->user_id;
+        // });
+        //
+        // // Event Creator can delete other attendee, or the attendees can delete themselves
+        // Gate::define('delete-attendee', function($user, Event $event, Attendee $attendee) {
+        //     return $user->id === $event->user_id || $user->id === $attendee->user_id;
+        // });
     }
 }

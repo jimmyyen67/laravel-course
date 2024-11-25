@@ -22,7 +22,18 @@ class EventController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except(['index', 'show']);
-                $this->relations = [
+
+        // authorizeResource 會將以下的授權檢查，自動映射到 Policy 中的對應方法：
+        // index()   -> viewAny
+        // show()    -> view
+        // create()  -> create
+        // store()   -> create
+        // edit()    -> update
+        // update()  -> update
+        // delete()  -> delete
+        $this->authorizeResource(Event::class, 'event');
+
+        $this->relations = [
             'user',
             'attendees',
             'attendees.user',
@@ -67,7 +78,6 @@ class EventController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @throws AuthorizationException
      */
     public function update(Request $request, Event $event): EventResource
     {
@@ -77,7 +87,7 @@ class EventController extends Controller
 
         // Using authorize is just the same as Gate, but you don't need to use abort() to return 403
         // also you are not able to use custom error message like "You are not authorized to update this event"
-        $this->authorize('update-event', $event);
+        // $this->authorize('update-event', $event);
 
         $event->update(
             $request->validate([
