@@ -14,6 +14,7 @@ services:
       - TZ=Asia/Taipei
     depends_on:
       - mysql
+    tty: true # 確保容器不會自動退出
 
   nginx:
     image: nginx:alpine
