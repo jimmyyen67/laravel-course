@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Event;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection as AnonymousResourceCollectionAlias;
+use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
@@ -65,9 +67,18 @@ class EventController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @throws AuthorizationException
      */
     public function update(Request $request, Event $event): EventResource
     {
+        // if (Gate::denies('update-event', $event)) {
+        //     abort(403, 'You are not authorized to update this event');
+        // }
+
+        // Using authorize is just the same as Gate, but you don't need to use abort() to return 403
+        // also you are not able to use custom error message like "You are not authorized to update this event"
+        $this->authorize('update-event', $event);
+
         $event->update(
             $request->validate([
                 'name' => 'sometimes|string|max:255',

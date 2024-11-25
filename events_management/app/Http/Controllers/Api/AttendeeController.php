@@ -7,6 +7,7 @@ use App\Http\Resources\AttendeeResource;
 use App\Http\Traits\CanLoadRelationships;
 use App\Models\Attendee;
 use App\Models\Event;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse as JsonResponseAlias;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection as AnonymousResourceCollectionAlias;
@@ -22,6 +23,8 @@ class AttendeeController extends Controller
         $this->relations = [
             'user',
         ];
+
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'update']);
     }
 
     /**
@@ -68,9 +71,11 @@ class AttendeeController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @throws AuthorizationException
      */
     public function destroy(Event $event, Attendee $attendee): JsonResponseAlias
     {
+        $this->authorize('delete-attendee', [$event, $attendee]);
         $attendee->delete();
         return response()->json(status: 204);
     }
