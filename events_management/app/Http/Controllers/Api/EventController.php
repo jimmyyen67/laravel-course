@@ -22,6 +22,7 @@ class EventController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('throttle:api')->only(['store', 'update', 'destroy']);
 
         // authorizeResource 會將以下的授權檢查，自動映射到 Policy 中的對應方法：
         // index()   -> viewAny
