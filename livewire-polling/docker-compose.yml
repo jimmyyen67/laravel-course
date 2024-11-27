@@ -34,7 +34,7 @@ services:
         container_name: mysql
         restart: unless-stopped
         environment:
-            MYSQL_DATABASE: laravel
+            MYSQL_DATABASE: laravel_polling
             MYSQL_ROOT_PASSWORD: root
         ports:
             - "3306:3306"
