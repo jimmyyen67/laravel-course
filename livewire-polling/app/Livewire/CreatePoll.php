@@ -10,7 +10,7 @@ use Livewire\Component;
 class CreatePoll extends Component
 {
     public string $title;
-    public array $options;
+    public array $options = ['']; // need first empty option for user to input
 
     /**
      * @return Factory|View|Application|\Illuminate\Contracts\Foundation\Application
@@ -20,9 +20,22 @@ class CreatePoll extends Component
         return view('livewire.create-poll');
     }
 
-    public function addOption()
+    /**
+     * @return void
+     */
+    public function addOption(): void
     {
         $this->options[] = '';
+    }
+
+    /**
+     * @param int $index
+     * @return void
+     */
+    public function removeOption(int $index): void
+    {
+        unset($this->options[$index]);
+        $this->options = array_values($this->options); // re-index the array
     }
 
     // public function mount()
