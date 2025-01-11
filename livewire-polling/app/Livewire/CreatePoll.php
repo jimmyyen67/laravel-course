@@ -6,6 +6,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Component;
+use App\Models\Poll;
 
 class CreatePoll extends Component
 {
@@ -15,7 +16,7 @@ class CreatePoll extends Component
     /**
      * @return Factory|View|Application|\Illuminate\Contracts\Foundation\Application
      */
-    public function render(): Factory|View|Application|\Illuminate\Contracts\Foundation\Application
+    public function render()
     {
         return view('livewire.create-poll');
     }
@@ -36,6 +37,21 @@ class CreatePoll extends Component
     {
         unset($this->options[$index]);
         $this->options = array_values($this->options); // re-index the array
+    }
+
+    public function createPoll()
+    {
+        $poll = Poll::create([
+            'title' => $this->title,
+        ]);
+
+        foreach($this->options as $optionName) {
+            $poll->options()->create([
+                'name' => $optionName,
+            ]);
+        }
+
+        $this->reset(['title', 'options']);
     }
 
     // public function mount()
