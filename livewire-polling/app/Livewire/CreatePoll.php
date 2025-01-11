@@ -80,10 +80,7 @@ class CreatePoll extends Component
         // }
 
         $this->reset(['title', 'options']);
-    }
 
-    // public function mount()
-    // {
-    //
-    // }
+        $this->dispatch('pollCreated');
+    }
 }
