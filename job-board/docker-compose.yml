@@ -8,8 +8,11 @@ services:
         container_name: laravel_app
         restart: unless-stopped
         working_dir: /var/www/html
+        ports:
+            - "5173:5173"  # 加入 Vite 的 port
         volumes:
             - ./:/var/www/html
+            - /var/www/html/node_modules  # 避免覆蓋 node_modules
         networks:
             - laravel_network
         depends_on:

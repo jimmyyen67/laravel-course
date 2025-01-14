@@ -10,7 +10,10 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     supervisor \
-    nginx
+    nginx \
+    nodejs \
+    npm
+
 
 # Insatll PHP Extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
@@ -26,6 +29,9 @@ COPY . .
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./docker/supervisor/laravel.conf /etc/supervisor/conf.d/laravel.conf
 
+# Install NPM Dependencies and Build Assets
+RUN npm install && npm run build
+
 # Set Permission
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage
@@ -33,7 +39,7 @@ RUN chown -R www-data:www-data /var/www/html \
 # Install PHP Composer Dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-EXPOSE 9000
+EXPOSE 9000 5173
 
 # Start Supervisor
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
