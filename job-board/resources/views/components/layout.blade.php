@@ -9,6 +9,6 @@
 
     </head>
     <body>
-        <div class="text-2xl">This should be a big Text.</div>
+        {{ $slot }}
     </body>
 </html>
