@@ -15,7 +15,14 @@ class RadioGroup extends Component
         public string $name,
         public array $options
     ) {
+        //
+    }
 
+    public function optionsWithLabels(): array
+    {
+        return array_is_list($this->options)
+            ? array_combine(array_map('ucfirst', $this->options), $this->options)
+            : $this->options;
     }
 
     /**
