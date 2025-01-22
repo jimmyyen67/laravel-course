@@ -8,7 +8,7 @@
         </svg>
     </button>
     @endif
-    <input tpye="{{ $type }}" x-ref="input-{{ $name }}" name="{{ $name }}" placeholder="{{ $placeholder }}"
-        value="{{ $value }}"
+    <input x-ref="input-{{ $name }}" type="{{ $type }}" name="{{ $name }}" placeholder="{{ $placeholder }}"
+        value="{{ $value }}" id="{{ $name }}"
         class="pr-8 w-full rounded-md border-0 px-2.5 py-1.5 text-sm ring-1 ring-slate-300 placeholder:text-slate-400 focus:ring-2">
 </div>
