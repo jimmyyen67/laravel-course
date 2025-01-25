@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::get('/', fn() => to_route('jobs.index'));
 Route::resource('jobs', JobController::class)
     ->only(['index', 'show']);
@@ -32,5 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('job.application', JobApplicationController::class)
         ->only(['create', 'store']);
     Route::resource('my-job-applications', MyJobApllicationController::class)
-        ->only(['index', 'destry']);
+        ->only(['index', 'destroy']);
 });
