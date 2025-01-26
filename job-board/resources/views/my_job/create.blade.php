@@ -1,5 +1,5 @@
 <x-layout>
-    <x-breadcrumbs :links"['My Jobs' => route('my-jobs.index'), 'create' => '#']" class="mb-4" />
+    <x-breadcrumbs :links="['My Jobs' => route('my-jobs.index'), 'create' => '#']" class="mb-4" />
 
     <x-card class="mb-8">
         <form action="{{ route('my-jobs.store') }}" method="POST">
@@ -14,7 +14,7 @@
                     <x-text-input name="location" />
                 </div>
                 <div class="col-span-2">
-                    <x-label for="salary" :required="true">Job Title</x-label>
+                    <x-label for="salary" :required="true">Salary</x-label>
                     <x-text-input name="salary" type="number" />
                 </div>
                 <div class="col-span-2">
@@ -23,16 +23,11 @@
                 </div>
                 <div>
                     <x-label for="experience" :required="true">Experience</x-label>
-                    <x-radio-group name="experience" :value="old('experience')"
-                        :options="\App\Models\Job::$experience"
-                        :allOption="false" />
+                    <x-radio-group name="experience" :value="old('experience')" :options="\App\Models\Job::$experience" :allOption="false" />
                 </div>
                 <div>
                     <x-label for="category" :required="true">Category</x-label>
-                    <x-radio-group name="category"
-                        :value="old('category')"
-                        :options="\App\Models\Job::$category"
-                        :allOption="false" />
+                    <x-radio-group name="category" :value="old('category')" :options="\App\Models\Job::$category" :allOption="false" />
                 </div>
                 <div class="col-span-2">
                     <x-button class="w-full">Create</x-button>
